@@ -29,7 +29,6 @@ def readfile():
         pdf_url = request.json.get('pdf_url')
         uuid = request.json.get('uuid')
         r = requests.get(pdf_url)
-    #doc = pymupdf.open(pdf_url)
     
     # Check if the request was successful
         if r.status_code != 200:
@@ -48,12 +47,11 @@ def readfile():
             img_stream=BytesIO()
             img_stream_2=BytesIO(pix.tobytes())
             #print("png size: ",len(img_stream_2.getvalue())/1024,"kb")
+
             img = Image.open(img_stream_2)
-            #print("png size: ",img.size)
             img = img.convert("RGB")
             img.save(img_stream, "JPEG", optimize=True, quality=80)
-            # img2=Image.open(img_stream)
-            # img2.show()
+
 
             blob_name = f"{uuid}_page_{page_number + 1}.jpg"
             blob_client = blob_service_client.get_blob_client(container=CONTAINER_NAME, blob=blob_name)
