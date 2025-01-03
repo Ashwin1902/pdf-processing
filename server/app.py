@@ -38,6 +38,10 @@ def readfile():
         if 'application/pdf' not in r.headers.get('Content-Type', ''):
             return jsonify({"error": "The fetched content is not a valid PDF file."}), 400
 
+        pdf=mongo.db.pdfProcessed.find_one({"uuid": uuid})
+        if pdf!=None:
+            return jsonify({"error":"uuid already exists"}),400
+        
         data = r.content
         doc = pymupdf.Document(stream=data)
         image_urls = []
